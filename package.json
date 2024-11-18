@@ -1,0 +1,21 @@
+{
+  "name": "foodies",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently 'npm:dev:*'",
+    "dev:backend": "cd apps/backend && npm run dev",
+    "dev:frontend": "cd apps/frontend && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "workspaces": [
+    "./apps/frontend",
+    "./apps/backend"
+  ],
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
