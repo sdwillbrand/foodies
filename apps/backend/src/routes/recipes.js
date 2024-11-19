@@ -91,7 +91,7 @@ recipeRouter.put("/:id", checkJWT, async (req, res, next) => {
     const id = req.params.id;
     const user = req.user;
     const recipe = await Recipe.findById(id);
-    if (recipe.user !== user) {
+    if (!recipe.user.equals(user)) {
       return res.sendStatus(403);
     }
     const newRecipe = await Recipe.findOneAndUpdate(
@@ -114,7 +114,7 @@ recipeRouter.delete("/:id", checkJWT, async (req, res, next) => {
     const user = req.user;
 
     const recipe = await Recipe.findById(id);
-    if (recipe.user !== user) {
+    if (!recipe.user.equals(user)) {
       return res.sendStatus(403);
     }
     await Recipe.findByIdAndDelete(id);

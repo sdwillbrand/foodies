@@ -2,7 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import { FiCompass, FiLogIn, FiPlusCircle, FiLogOut } from "react-icons/fi";
 import { BiFoodMenu } from "react-icons/bi";
 import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const Header = () => {
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -24,7 +24,7 @@ export const Header = () => {
         </NavLink>
         {isAuthenticated && (
           <div className="flex gap-5 p-5 mr-10">
-            <p>Hello, {user.nickname}</p>
+            <p>Hallo, {user.nickname}</p>
             <NavLink
               end
               className={({ isActive }) =>

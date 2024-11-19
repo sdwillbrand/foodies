@@ -253,7 +253,7 @@ export const CreateRecipe = () => {
         </button>
         <div className="w-full border-slate-200 border rounded-md"></div>
         <button
-          className="p-1 rounded-md bg-green-600 hover:bg-green-600/80 text-white"
+          className="p-1 rounded-md bg-sky-500 hover:bg-sky-400 text-white"
           type="submit"
         >
           Speichern

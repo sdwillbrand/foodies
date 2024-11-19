@@ -4,10 +4,20 @@ export const RecipeCard = ({ recipe }) => {
   return (
     <Link
       to={`/recipe/${recipe.slug}`}
-      className="m-5 border rounded-lg p-5 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-xl transition-all hover:cursor-pointer hover:border-primary"
+      className="m-5 border rounded-lg hover:cursor-pointer hover:border-primary group"
     >
-      <h1 className="text-3xl pb-5">{recipe.title}</h1>
-      <p className="text-slate-500 line-clamp-2">{recipe.description}</p>
+      {recipe.bannerImage && (
+        <div className="relative w-full max-h-[150px] overflow-hidden flex items-center justify-center rounded-t-md">
+          <img
+            className="object-cover bg-center group-hover:scale-110 transition-transform duration-500"
+            src={`${import.meta.env.VITE_API_URL}/${recipe.bannerImage}`}
+          />
+        </div>
+      )}
+      <div className="p-5">
+        <h1 className="text-3xl pb-5">{recipe.title}</h1>
+        <p className="text-slate-500 line-clamp-2">{recipe.description}</p>
+      </div>
     </Link>
   );
 };

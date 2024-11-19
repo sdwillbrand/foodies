@@ -30,3 +30,20 @@ export async function getRecipe(id) {
     return [];
   }
 }
+
+export async function updateRecipe(id, recipe) {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(recipe),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updatedRecipe = await res.json();
+    return updatedRecipe;
+  } catch (e) {
+    console.error(e);
+  }
+}
