@@ -8,8 +8,8 @@ export const Recipe = () => {
   const recipe = useLoaderData();
   return (
     <>
-      {isAuthenticated && <RecipeHeader recipe={recipe} />}
-      <main className="flex flex-col lg:mx-40 mt-10 mx-10">
+      <main className="flex flex-col lg:mx-40 pt-20 mx-10">
+        {isAuthenticated && <RecipeHeader recipe={recipe} />}
         <h1 className="text-5xl font-semibold from-transparent to-current transition-opacity self-center">
           {recipe.title}
         </h1>

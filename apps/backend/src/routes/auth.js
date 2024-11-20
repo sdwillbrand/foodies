@@ -42,13 +42,12 @@ authRouter.post("/login", async (req, res) => {
 });
 
 authRouter.get("/logout", async (req, res) => {
-  res
-    .clearCookie("jwt", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    })
-    .send("User logged out");
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
+  res.end();
 });
 
 authRouter.get("/status", checkJWT, async (req, res) => {

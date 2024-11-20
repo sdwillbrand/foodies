@@ -15,7 +15,7 @@ export const RecipeHeader = ({ recipe }) => {
   };
 
   return (
-    <div className="sticky top-0 flex flex-row justify-end m-2 gap-2">
+    <div className="fixed top-0 right-0 flex flex-row mx-2 gap-2 pt-24">
       <button
         title={recipe.public ? "Veröffentlichen" : "Verheimlichen"}
         className="rounded-md p-2 bg-slate-500 hover:bg-slate-400 text-white"

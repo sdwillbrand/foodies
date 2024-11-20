@@ -17,7 +17,9 @@ export async function login(username, password) {
 
 export async function logout() {
   try {
-    await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`);
+    await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+      credentials: "include",
+    });
   } catch (e) {
     console.error(e);
   }

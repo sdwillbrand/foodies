@@ -45,7 +45,7 @@ export const CreateRecipe = () => {
   };
 
   return (
-    <main className="flex justify-center my-10">
+    <main className="flex justify-center p-24 mb-5">
       <RecipeForm
         recipe={recipe}
         onSubmit={handleSubmit}

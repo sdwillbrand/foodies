@@ -102,8 +102,10 @@ recipeRouter.put(
         description: req.body.description,
         user: req.user, // From your JWT middleware
         bannerImage: req.file?.path, // File path of uploaded image
-        ingredients: JSON.parse(req.body.ingredients),
-        instructions: JSON.parse(req.body.instructions),
+        public: req.body.public,
+        ingredients: req.body.ingredients && JSON.parse(req.body.ingredients),
+        instructions:
+          req.body.instructions && JSON.parse(req.body.instructions),
       };
       const newRecipe = await Recipe.findOneAndUpdate(
         { _id: id, user },

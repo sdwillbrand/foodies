@@ -43,7 +43,7 @@ export const EditRecipe = () => {
   };
 
   return (
-    <main className="flex justify-center my-10 mx-5">
+    <main className="flex justify-center pt-24 mb-5 mx-5">
       <RecipeForm
         recipe={recipe}
         onChange={handleChange}

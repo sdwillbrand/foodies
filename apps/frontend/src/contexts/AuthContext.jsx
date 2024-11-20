@@ -27,11 +27,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const checkStatus = async () => {
+  const logout = async () => {
     try {
       setLoading(true);
-      const user = await authService.checkStatus();
-      setUser(user);
+      await authService.logout();
+      setUser(undefined);
     } catch (e) {
       console.error(e);
     } finally {
@@ -39,9 +39,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const checkStatus = async () => {
+    try {
+      setLoading(true);
+      const user = await authService.checkStatus();
+      setUser(user);
+    } catch (e) {
+      console.error(e);
+      setUser(undefined);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isLoading, isAuthenticated, user, login, checkStatus }}
+      value={{ isLoading, isAuthenticated, user, login, checkStatus, logout }}
     >
       {children}
     </AuthContext.Provider>
