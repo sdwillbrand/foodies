@@ -13,7 +13,7 @@ export const Recipe = () => {
         <h1 className="text-5xl font-semibold from-transparent to-current transition-opacity self-center">
           {recipe.title}
         </h1>
-        <section className="flex flex-row mt-16">
+        <section className="flex flex-row mt-16 gap-5">
           {recipe.bannerImage && (
             <div className="relative max-w-[675px] max-h-[500px] overflow-hidden rounded-md">
               <img

@@ -1,16 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { RecipeForm } from "../components/recipe/RecipeForm";
+import { useState } from "react";
 
-export const CreateRecipe = () => {
-  const navigate = useNavigate();
-  const [recipe, setRecipe] = useState({
-    title: "",
-    description: "",
-    bannerImage: null, // For storing the file itself,
-    ingredients: [],
-    instructions: [],
-  });
+export const EditRecipe = () => {
+  const initialRecipe = useLoaderData();
+
+  const [recipe, setRecipe] = useState(initialRecipe);
 
   const handleChange = (file) => {
     setRecipe((prev) => ({ ...prev, bannerImage: file }));
@@ -26,14 +21,17 @@ export const CreateRecipe = () => {
     formData.append("ingredients", JSON.stringify(recipe.ingredients));
     formData.append("instructions", JSON.stringify(recipe.instructions));
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes`, {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/recipes/${recipe._id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
-        navigate("/dashboard");
+        // navigate("/dashboard");
       } else {
         const error = await response.json();
         console.error("Failed to save recipe: " + error.message);
@@ -45,11 +43,11 @@ export const CreateRecipe = () => {
   };
 
   return (
-    <main className="flex justify-center my-10">
+    <main className="flex justify-center my-10 mx-5">
       <RecipeForm
         recipe={recipe}
-        onSubmit={handleSubmit}
         onChange={handleChange}
+        onSubmit={handleSubmit}
       />
     </main>
   );

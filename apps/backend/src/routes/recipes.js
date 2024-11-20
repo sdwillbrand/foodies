@@ -85,27 +85,40 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
   }
 });
 
-recipeRouter.put("/:id", checkJWT, async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const user = req.user;
-    const recipe = await Recipe.findById(id);
-    if (!recipe.user.equals(user)) {
-      return res.sendStatus(403);
-    }
-    const newRecipe = await Recipe.findOneAndUpdate(
-      { _id: id, user },
-      req.body,
-      {
-        new: true,
-        runValidators: true,
+recipeRouter.put(
+  "/:id",
+  upload.single("bannerImage"),
+  checkJWT,
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const user = req.user;
+      const recipe = await Recipe.findById(id);
+      if (!recipe.user.equals(user)) {
+        return res.sendStatus(403);
       }
-    );
-    return res.json(newRecipe);
-  } catch (e) {
-    next(e);
+      const recipeData = {
+        title: req.body.title,
+        description: req.body.description,
+        user: req.user, // From your JWT middleware
+        bannerImage: req.file?.path, // File path of uploaded image
+        ingredients: JSON.parse(req.body.ingredients),
+        instructions: JSON.parse(req.body.instructions),
+      };
+      const newRecipe = await Recipe.findOneAndUpdate(
+        { _id: id, user },
+        recipeData,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      return res.json(newRecipe);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 recipeRouter.delete("/:id", checkJWT, async (req, res, next) => {
   try {

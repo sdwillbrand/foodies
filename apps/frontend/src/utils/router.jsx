@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { Recipe } from "../pages/Recipe";
+import { EditRecipe } from "../pages/EditRecipe";
 import { Layout } from "../components/layouts/Layout";
 import { DashboardLayout } from "../components/layouts/DashboardLayout";
 import { Login } from "../pages/Login";
@@ -58,6 +59,15 @@ export const router = createBrowserRouter([
       {
         path: "new",
         element: <CreateRecipe />,
+      },
+      {
+        path: "edit/:slug",
+        element: <EditRecipe />,
+        loader: async ({ params }) => {
+          const slug = params.slug;
+          const recipe = await getRecipe(slug);
+          return recipe;
+        },
       },
     ],
   },

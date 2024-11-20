@@ -15,6 +15,14 @@ export async function login(username, password) {
   }
 }
 
+export async function logout() {
+  try {
+    await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export async function checkStatus() {
   try {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/status`, {
