@@ -6,6 +6,7 @@ import { DashboardLayout } from "../components/layouts/DashboardLayout";
 import { Login } from "../pages/Login";
 import { Dashboard } from "../pages/Dashboard";
 import { CreateRecipe } from "../pages/CreateRecipe";
+import { getRecipe, getRecipes, updateRecipe } from "../services/recipe";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,20 @@ export const router = createBrowserRouter([
       },
       {
         path: "recipe/:slug",
+        loader: async ({ params }) => {
+          const recipe = await getRecipe(params.slug);
+          return recipe;
+        },
+        action: async ({ request }) => {
+          const formData = await request.formData();
+          const action = formData.get("action");
+          if (action === "PUBLISH" && request.method === "PUT") {
+            await updateRecipe(formData.get("recipeId"), {
+              public: formData.get("public"),
+            });
+            return { ok: true };
+          }
+        },
         element: <Recipe />,
         errorElement: <Navigate to="/" />,
       },
@@ -28,20 +43,21 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
+    path: "/dashboard/:userId",
     element: <DashboardLayout />,
     errorElement: <Navigate to="/" />,
     children: [
       {
+        loader: async ({ params }) => {
+          const recipes = await getRecipes({ userId: params.userId });
+          return recipes;
+        },
         index: true,
         element: <Dashboard />,
       },
       {
         path: "new",
         element: <CreateRecipe />,
-      },
-      {
-        path: ":id",
       },
     ],
   },

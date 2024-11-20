@@ -1,10 +1,10 @@
 export async function getRecipes(opt) {
   try {
     const page = (opt && opt.page) ?? 1;
-    const userId = opt && opt.page;
+    const userId = opt && opt.userId;
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/recipes/${
-        userId ? `${userId}/` : ""
+        userId ? `${userId}/all` : ""
       }?${new URLSearchParams({ page })}`,
       {
         credentials: "include",

@@ -1,22 +1,19 @@
 import { useContext } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 export const Login = () => {
-  const { login, isAuthenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { login, isAuthenticated, user } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const username = e.target["username"].value;
     const password = e.target["password"].value;
-    login(username, password).then(() => {
-      navigate("/dashboard");
-    });
+    login(username, password);
   };
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to={`/dashboard/${user._id}`} />;
   }
 
   return (

@@ -32,7 +32,7 @@ export const Header = () => {
                   isActive ? "underline underline-offset-2" : ""
                 } flex items-center gap-1`
               }
-              to="/dashboard"
+              to={`/dashboard/${user._id}`}
             >
               <span>My recipes</span>
               <BiFoodMenu />
@@ -43,7 +43,7 @@ export const Header = () => {
                   isActive ? "underline underline-offset-2" : ""
                 } flex items-center gap-1`
               }
-              to="/dashboard/new"
+              to={`/dashboard/${user._id}/new`}
             >
               <span>New</span>
               <FiPlusCircle />

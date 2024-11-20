@@ -1,10 +1,16 @@
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { updateRecipe } from "../../services/recipe";
+import { useSubmit } from "react-router-dom";
 
 export const RecipeHeader = ({ recipe }) => {
+  const submit = useSubmit();
   const togglePublishRecipe = () => {
-    updateRecipe(recipe._id, { public: !recipe.public }).then((result) => {
-      Object.assign(recipe, result);
+    const formData = new FormData();
+    formData.append("recipeId", recipe._id);
+    formData.append("public", !recipe.public);
+    formData.append("action", "PUBLISH");
+    submit(formData, {
+      method: "PUT",
+      action: `/recipe/${recipe.slug}`,
     });
   };
 
@@ -15,7 +21,7 @@ export const RecipeHeader = ({ recipe }) => {
         className="rounded-md p-2 bg-slate-500 hover:bg-slate-400 text-white"
         onClick={togglePublishRecipe}
       >
-        {recipe.public ? <FiEyeOff /> : <FiEye />}
+        {recipe.public ? <FiEye /> : <FiEyeOff />}
       </button>
     </div>
   );

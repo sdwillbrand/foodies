@@ -72,8 +72,7 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
     const size = req.query.size ?? 10;
     const user = req.user;
     const { userId } = req.params;
-
-    if (userId !== user._id) {
+    if (userId !== user) {
       return res.sendStatus(403);
     }
 
