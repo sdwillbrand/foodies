@@ -1,9 +1,16 @@
-import { useState, Fragment } from "react";
-import { FiPlusSquare, FiMinusSquare } from "react-icons/fi";
+import { useRef, useState, Fragment, useId } from "react";
+import { FiPlusSquare, FiMinusSquare, FiTrash } from "react-icons/fi";
 
-export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
+export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
   const [recipe, setRecipe] = useState(initialRecipe);
   const [preview, setPreview] = useState(initialRecipe.bannerImage);
+  const bannerImageRef = useRef(null);
+  const id = useId();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(recipe);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -12,7 +19,7 @@ export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
       // File upload
       const file = e.target.files[0];
       if (file) {
-        onChange(file);
+        setRecipe((prev) => ({ ...prev, bannerImage: file }));
 
         // Generate a preview URL
         const reader = new FileReader();
@@ -77,11 +84,17 @@ export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
     });
   };
 
+  const handleRemoveBanner = () => {
+    setPreview("");
+    setRecipe((prev) => ({ ...prev, bannerImage: "" }));
+    bannerImageRef.current.value = "";
+  };
+
   return (
     <form
-      className="flex flex-col gap-5"
+      className="grid grid-cols-1 gap-5"
       onChange={handleChange}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     >
       <div className="flex flex-col">
         <label className="text-sm text-slate-400">Titel</label>
@@ -106,13 +119,28 @@ export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
       </div>
       <div className="flex flex-col">
         <label className="text-sm text-slate-400">Banner</label>
-        <input name="bannerImage" type="file" />
+        <input
+          name="bannerImage"
+          type="file"
+          accept="image/*"
+          ref={bannerImageRef}
+        />
         {preview && (
-          <img
-            src={`${import.meta.env.VITE_API_URL}/${preview}`}
-            alt="Preview"
-            className="mt-2 object-contain border max-w-56 rounded-md"
-          />
+          <div className="flex items-start mt-2 gap-2">
+            <img
+              src={`${
+                preview.includes("data")
+                  ? ""
+                  : `${import.meta.env.VITE_API_URL}/`
+              }${preview}`}
+              alt="Preview"
+              className="object-contain border max-w-56 rounded-md"
+            />
+            <FiTrash
+              className="hover:text-red-500 hover:cursor-pointer"
+              onClick={handleRemoveBanner}
+            />
+          </div>
         )}
       </div>
       <div className="w-full border-slate-200 border rounded-md"></div>
@@ -125,15 +153,13 @@ export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
           <p className="col-span-4">Füge Zutaten hinzu!</p>
         )}
         {recipe.ingredients.map((ingredient, index) => (
-          <Fragment key={ingredient.name + index}>
+          <Fragment key={id + index}>
             <input
               required
               className="border p-1 rounded-md"
-              cols={50}
               name="name"
               value={ingredient.name}
               onChange={(e) => {
-                e.stopPropagation();
                 handleChangeIngredient(index, e.target.name, e.target.value);
               }}
               placeholder="Eier"
@@ -145,7 +171,6 @@ export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
               name="quantity"
               value={ingredient.quantity}
               onChange={(e) => {
-                e.stopPropagation();
                 handleChangeIngredient(index, e.target.name, e.target.value);
               }}
               placeholder="2"
@@ -155,7 +180,6 @@ export const RecipeForm = ({ onSubmit, onChange, recipe: initialRecipe }) => {
               name="unit"
               value={ingredient.unit}
               onChange={(e) => {
-                e.stopPropagation();
                 handleChangeIngredient(index, e.target.name, e.target.value);
               }}
               placeholder="Stück"

@@ -11,6 +11,7 @@ recipeRouter.get("/", async (req, res, next) => {
     const size = req.query.size ?? 10;
 
     const result = await Recipe.find({ public: true })
+      .populate(["tags"])
       .limit(size)
       .skip(page - 1);
     return res.json(result);
@@ -78,7 +79,8 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
 
     const result = await Recipe.find({ user })
       .limit(size)
-      .skip(page - 1);
+      .skip(page - 1)
+      .populate("tags");
     return res.json(result);
   } catch (e) {
     next(e);
@@ -101,7 +103,7 @@ recipeRouter.put(
         title: req.body.title,
         description: req.body.description,
         user: req.user, // From your JWT middleware
-        bannerImage: req.file?.path, // File path of uploaded image
+        bannerImage: req.file ? req.file.path : req.body.bannerImage, // File path of uploaded image
         public: req.body.public,
         ingredients: req.body.ingredients && JSON.parse(req.body.ingredients),
         instructions:

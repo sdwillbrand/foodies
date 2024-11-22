@@ -3,6 +3,7 @@ import { IngredientSchema } from "./ingredient.js";
 import { InstructionSchema } from "./instruction.js";
 import { toKebab } from "../libs/strings.js";
 import { User } from "./user.js";
+import { Tag } from "./tag.js";
 
 export const RecipeSchema = new Schema(
   {
@@ -24,13 +25,13 @@ export const RecipeSchema = new Schema(
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: User,
       required: true,
     },
     tags: [
       {
         type: Schema.Types.ObjectId,
-        ref: "tag",
+        ref: Tag,
       },
     ],
   },

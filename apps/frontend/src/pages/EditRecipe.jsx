@@ -1,18 +1,10 @@
 import { useLoaderData } from "react-router-dom";
 import { RecipeForm } from "../components/recipe/RecipeForm";
-import { useState } from "react";
 
 export const EditRecipe = () => {
   const initialRecipe = useLoaderData();
 
-  const [recipe, setRecipe] = useState(initialRecipe);
-
-  const handleChange = (file) => {
-    setRecipe((prev) => ({ ...prev, bannerImage: file }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (recipe) => {
     const formData = new FormData();
 
     formData.append("title", recipe.title);
@@ -44,11 +36,7 @@ export const EditRecipe = () => {
 
   return (
     <main className="flex justify-center pt-24 mb-5 mx-5">
-      <RecipeForm
-        recipe={recipe}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-      />
+      <RecipeForm recipe={initialRecipe} onSubmit={handleSubmit} />
     </main>
   );
 };

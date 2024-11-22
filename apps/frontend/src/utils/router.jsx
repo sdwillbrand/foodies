@@ -7,7 +7,12 @@ import { DashboardLayout } from "../components/layouts/DashboardLayout";
 import { Login } from "../pages/Login";
 import { Dashboard } from "../pages/Dashboard";
 import { CreateRecipe } from "../pages/CreateRecipe";
-import { getRecipe, getRecipes, updateRecipe } from "../services/recipe";
+import {
+  getRecipe,
+  getRecipes,
+  updateRecipe,
+  deleteRecipe,
+} from "../services/recipe";
 
 export const setupRouter = ({ logout }) =>
   createBrowserRouter([
@@ -16,6 +21,10 @@ export const setupRouter = ({ logout }) =>
       element: <Layout />,
       children: [
         {
+          loader: async () => {
+            const recipes = await getRecipes();
+            return recipes;
+          },
           element: <Home />,
           index: true,
         },
@@ -25,13 +34,16 @@ export const setupRouter = ({ logout }) =>
             const recipe = await getRecipe(params.slug);
             return recipe;
           },
-          action: async ({ request }) => {
+          action: async ({ params, request }) => {
             const formData = await request.formData();
             const action = formData.get("action");
             if (action === "PUBLISH" && request.method === "PUT") {
               await updateRecipe(formData.get("recipeId"), {
                 public: formData.get("public"),
               });
+            } else if (request.method === "DELETE") {
+              await deleteRecipe(params.slug);
+              return redirect("/");
             }
             return { ok: true };
           },

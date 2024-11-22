@@ -1,23 +1,13 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RecipeForm } from "../components/recipe/RecipeForm";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export const CreateRecipe = () => {
   const navigate = useNavigate();
-  const [recipe, setRecipe] = useState({
-    title: "",
-    description: "",
-    bannerImage: null, // For storing the file itself,
-    ingredients: [],
-    instructions: [],
-  });
+  const { user } = useContext(AuthContext);
 
-  const handleChange = (file) => {
-    setRecipe((prev) => ({ ...prev, bannerImage: file }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (recipe) => {
     const formData = new FormData();
 
     formData.append("title", recipe.title);
@@ -33,7 +23,7 @@ export const CreateRecipe = () => {
       });
 
       if (response.ok) {
-        navigate("/dashboard");
+        navigate(`/dashboard/${user._id}`);
       } else {
         const error = await response.json();
         console.error("Failed to save recipe: " + error.message);
@@ -45,11 +35,16 @@ export const CreateRecipe = () => {
   };
 
   return (
-    <main className="flex justify-center p-24 mb-5">
+    <main className="flex justify-center pt-24 mb-5 mx-5">
       <RecipeForm
-        recipe={recipe}
+        recipe={{
+          title: "",
+          description: "",
+          bannerImage: null, // For storing the file itself,
+          ingredients: [],
+          instructions: [],
+        }}
         onSubmit={handleSubmit}
-        onChange={handleChange}
       />
     </main>
   );

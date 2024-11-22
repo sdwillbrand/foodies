@@ -47,3 +47,16 @@ export async function updateRecipe(id, recipe) {
     console.error(e);
   }
 }
+
+export async function deleteRecipe(id) {
+  try {
+    await fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`, {
+      credentials: "include",
+      method: "DELETE",
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}

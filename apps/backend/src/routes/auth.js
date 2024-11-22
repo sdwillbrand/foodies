@@ -3,6 +3,8 @@ import { createHash } from "crypto";
 import { User } from "../models/user.js";
 import { issueJwt } from "../libs/auth.js";
 import { checkJWT } from "../middlewares/checkJWT.js";
+import { Recipe } from "../models/recipe.js";
+import { Tag } from "../models/tag.js";
 
 export const authRouter = Router();
 
@@ -20,7 +22,12 @@ authRouter.post("/register", async (req, res) => {
 
 authRouter.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ username }).populate("recipes");
+  const user = await User.findOne({ username }).populate({
+    path: "recipes",
+    populate: {
+      path: "tags",
+    },
+  });
   if (!user) {
     res.sendStatus(404);
     return;
@@ -52,6 +59,13 @@ authRouter.get("/logout", async (req, res) => {
 
 authRouter.get("/status", checkJWT, async (req, res) => {
   const userId = req.user;
-  const user = await User.findById(userId).populate("recipes");
+  const user = await User.findById(userId).populate({
+    path: "recipes",
+    model: Recipe,
+    populate: {
+      path: "tags",
+      model: Tag,
+    },
+  });
   return res.json(user);
 });

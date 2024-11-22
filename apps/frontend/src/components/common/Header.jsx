@@ -1,5 +1,5 @@
 import { Link, NavLink, Form } from "react-router-dom";
-import { FiCompass, FiLogIn } from "react-icons/fi";
+import { FiCompass, FiLogIn, FiUser } from "react-icons/fi";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Dropdown } from "./Dropdown";
@@ -11,7 +11,7 @@ export const Header = () => {
   return (
     <header className="fixed top-0 bg-primary w-full flex justify-between items-center h-20 z-50">
       <Link className="font-mono font-bold ml-10">FOODIES</Link>
-      <div className="flex gap-5 p-5 mr-10">
+      <div className="flex gap-5 p-5 md:mr-10">
         <NavLink
           className={({ isActive }) =>
             `${
@@ -26,8 +26,9 @@ export const Header = () => {
         {isAuthenticated && (
           <Dropdown
             header={
-              <p className="border rounded-lg p-1 border-black cursor-pointer">
-                Hallo, {user.nickname}
+              <p className="p-1 cursor-pointer flex items-center gap-1 hover:scale-105">
+                <FiUser className="rounded-full border m-1 p-1 w-7 h-7 border-black" />
+                {user.nickname}
               </p>
             }
           >
