@@ -2,6 +2,8 @@ import { Router } from "express";
 import { Recipe } from "../models/recipe.js";
 import { checkJWT, checkUser } from "../middlewares/checkJWT.js";
 import { upload } from "../middlewares/multer.js";
+import { validate } from "../middlewares/validate.js";
+import { putRecipeSchema } from "../schemas/recipe.js";
 
 export const recipeRouter = Router();
 
@@ -10,11 +12,14 @@ recipeRouter.get("/", async (req, res, next) => {
     const page = req.query.page ?? 1;
     const size = req.query.size ?? 10;
 
-    const result = await Recipe.find({ public: true })
+    const recipes = await Recipe.find({ public: true })
       .populate(["tags"])
       .limit(size)
-      .skip(page - 1);
-    return res.json(result);
+      .skip((page - 1) * size);
+
+    const total = await Recipe.find({ public: true }).countDocuments();
+
+    return res.json({ recipes, total });
   } catch (e) {
     next(e);
   }
@@ -91,6 +96,7 @@ recipeRouter.put(
   "/:id",
   upload.single("bannerImage"),
   checkJWT,
+  validate(putRecipeSchema),
   async (req, res, next) => {
     try {
       const id = req.params.id;
@@ -124,17 +130,11 @@ recipeRouter.put(
   }
 );
 
-recipeRouter.delete("/:id", checkJWT, async (req, res, next) => {
+recipeRouter.delete("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const user = req.user;
-
-    const recipe = await Recipe.findById(id);
-    if (!recipe.user.equals(user)) {
-      return res.sendStatus(403);
-    }
     await Recipe.findByIdAndDelete(id);
-    return res.sendStatus(200);
+    return res.sendStatus(204);
   } catch (e) {
     next(e);
   }

@@ -143,7 +143,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
           </div>
         )}
       </div>
-      <div className="w-full border-slate-200 border rounded-md"></div>
+      <div className="w-full border-slate-200 border"></div>
       <div className="grid grid-cols-4 gap-2">
         <label className="text-sm text-slate-400">Name</label>
         <label className="text-sm text-slate-400">Anzahl</label>

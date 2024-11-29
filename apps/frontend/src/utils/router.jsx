@@ -21,9 +21,11 @@ export const setupRouter = ({ logout }) =>
       element: <Layout />,
       children: [
         {
-          loader: async () => {
-            const recipes = await getRecipes();
-            return recipes;
+          loader: async ({ request }) => {
+            const url = new URL(request.url);
+            const page = url.searchParams.get("page");
+            const result = await getRecipes({ page });
+            return result;
           },
           element: <Home />,
           index: true,

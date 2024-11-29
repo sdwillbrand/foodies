@@ -10,8 +10,8 @@ export async function getRecipes(opt) {
         credentials: "include",
       }
     );
-    const recipes = await res.json();
-    return recipes;
+    const result = await res.json();
+    return result;
   } catch (e) {
     console.error(e);
     return [];

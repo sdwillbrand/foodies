@@ -51,14 +51,15 @@ async function seedUsers() {
 async function seedRecipes(user, tags) {
   await Recipe.deleteMany();
   const result = [];
-  for (let i = 0; i < 5; i++) {
+  let i = 0;
+  while (i < 50) {
     const recipe = {};
     recipe.title = faker.food.dish();
     recipe.description = faker.food.description();
     recipe.tags = tags;
     recipe.user = user._id;
     recipe.ingredients = [];
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < faker.number.int({ min: 5, max: 15 }); j++) {
       const ingredient = {
         unit: faker.helpers.arrayElement(["ml", "l", "g", "kg", "TL", "EL"]),
         quantity: faker.number.int({ max: 200 }),
@@ -67,15 +68,20 @@ async function seedRecipes(user, tags) {
       recipe.ingredients.push(ingredient);
     }
     recipe.instructions = [];
-    for (let k = 0; k < 5; k++) {
+    for (let k = 0; k < faker.number.int({ min: 5, max: 15 }); k++) {
       const instruction = {
-        description: `${k + 1} ${faker.lorem.sentences(2)}`,
+        description: faker.lorem.sentences(
+          faker.number.int({ min: 2, max: 5 })
+        ),
       };
       recipe.instructions.push(instruction);
     }
-    recipe.public = faker.helpers.arrayElement([true, false]);
-    const savedRecipe = await Recipe.create(recipe);
-    result.push(savedRecipe);
+    recipe.public = Math.random() > 0.1;
+    try {
+      const savedRecipe = await Recipe.create(recipe);
+      result.push(savedRecipe);
+      i++;
+    } catch (e) {}
   }
   return result;
 }
