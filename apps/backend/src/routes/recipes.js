@@ -13,27 +13,50 @@ recipeRouter.get("/", async (req, res, next) => {
     const size = req.query.size ?? 10;
     const q = req.query.q ?? "";
 
-    const filter = {
-      $or: [
-        { description: { $regex: q, $options: "i" } }, // Match in description
-        { title: { $regex: q, $options: "i" } }, // Match in title
-        { "tags.name": { $regex: q, $options: "i" } }, // Match tag names
-        { "ingredients.name": { $regex: q, $options: "i" } }, // Match ingredient names
-      ],
-    };
+    const [result] = await Recipe.aggregate([
+      {
+        $lookup: {
+          from: "tags", // Name of the Tag collection
+          localField: "tags", // Field in the Recipe schema
+          foreignField: "_id", // Field in the Tag schema
+          as: "tags", // Output array name
+        },
+      },
+      {
+        $lookup: {
+          from: "ingredients", // Adjust collection name if necessary
+          localField: "ingredients",
+          foreignField: "_id",
+          as: "ingredients",
+        },
+      },
+      {
+        $match: { public: true },
+      },
+      {
+        $match: {
+          $or: [
+            { description: { $regex: q, $options: "i" } },
+            { title: { $regex: q, $options: "i" } },
+            { "tags.name": { $regex: q, $options: "i" } },
+            { "ingredients.name": { $regex: q, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $facet: {
+          total: [{ $count: "count" }], // Count matching documents
+          data: [
+            { $skip: (p - 1) * size }, // Skip for pagination
+            { $limit: size }, // Limit for pagination
+          ],
+        },
+      },
+    ]);
 
-    const recipes = await Recipe.find({
-      public: true,
-      ...filter,
-    })
-      .populate(["tags"])
-      .limit(size)
-      .skip((p - 1) * size);
-
-    const total = await Recipe.find({
-      public: true,
-      ...filter,
-    }).countDocuments();
+    // Extract the total count and paginated data
+    const total = result.total[0]?.count || 0; // Total count of matching documents
+    const recipes = result.data; // Paginated recipes
 
     return res.json({ recipes, total });
   } catch (e) {

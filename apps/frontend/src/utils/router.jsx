@@ -25,8 +25,7 @@ export const setupRouter = ({ logout }) =>
             const url = new URL(request.url);
             const p = url.searchParams.get("p");
             const q = url.searchParams.get("q");
-            const result = await getRecipes({ p, q });
-            return result;
+            return getRecipes({ p, q });
           },
           element: <Home />,
           index: true,

@@ -12,7 +12,7 @@ export const Home = () => {
       const params = Object.fromEntries(prev.entries());
       return {
         ...params,
-        p: Math.min(Number(page) + 1, Math.floor(result.total / 10) + 1),
+        p: Math.min(Number(page) + 1, Math.floor(result.total / 10) || 1),
       };
     });
 
@@ -27,6 +27,9 @@ export const Home = () => {
 
   return (
     <main className="relative grid grid-cols-1 mx-10 py-20 lg:mx-56 md:grid-cols-2 lg:grid-cols-3">
+      {result.recipes.length === 0 && (
+        <p>Hm... Could not find any recipes...</p>
+      )}
       {result.recipes.map((recipe) => (
         <RecipeCard key={recipe._id} recipe={recipe} />
       ))}
@@ -35,7 +38,7 @@ export const Home = () => {
           <FiChevronLeft size={30} />
         </button>
         <span>
-          {page} of {Math.floor(result.total / 10) + 1}
+          {page} of {Math.floor(result.total / 10) || 1}
         </span>
         <button onClick={nextPage}>
           <FiChevronRight size={30} />
