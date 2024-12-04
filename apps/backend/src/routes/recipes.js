@@ -9,15 +9,31 @@ export const recipeRouter = Router();
 
 recipeRouter.get("/", async (req, res, next) => {
   try {
-    const page = req.query.page ?? 1;
+    const p = parseInt(req.query.p) || 1;
     const size = req.query.size ?? 10;
+    const q = req.query.q ?? "";
 
-    const recipes = await Recipe.find({ public: true })
+    const filter = {
+      $or: [
+        { description: { $regex: q, $options: "i" } }, // Match in description
+        { title: { $regex: q, $options: "i" } }, // Match in title
+        { "tags.name": { $regex: q, $options: "i" } }, // Match tag names
+        { "ingredients.name": { $regex: q, $options: "i" } }, // Match ingredient names
+      ],
+    };
+
+    const recipes = await Recipe.find({
+      public: true,
+      ...filter,
+    })
       .populate(["tags"])
       .limit(size)
-      .skip((page - 1) * size);
+      .skip((p - 1) * size);
 
-    const total = await Recipe.find({ public: true }).countDocuments();
+    const total = await Recipe.find({
+      public: true,
+      ...filter,
+    }).countDocuments();
 
     return res.json({ recipes, total });
   } catch (e) {
@@ -74,7 +90,7 @@ recipeRouter.get("/:slug", checkUser, async (req, res, next) => {
 
 recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
   try {
-    const page = req.query.page ?? 1;
+    const p = req.query.p ?? 1;
     const size = req.query.size ?? 10;
     const user = req.user;
     const { userId } = req.params;
@@ -84,7 +100,7 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
 
     const result = await Recipe.find({ user })
       .limit(size)
-      .skip(page - 1)
+      .skip(p - 1)
       .populate("tags");
     return res.json(result);
   } catch (e) {

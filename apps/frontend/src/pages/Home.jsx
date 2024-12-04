@@ -5,17 +5,25 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 export const Home = () => {
   const result = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = searchParams.get("page");
+  const page = parseInt(searchParams.get("p")) || 1;
 
   const nextPage = () =>
-    setSearchParams({
-      page: page
-        ? Math.min(Number(page) + 1, Math.floor(result.total / 10))
-        : 2,
+    setSearchParams((prev) => {
+      const params = Object.fromEntries(prev.entries());
+      return {
+        ...params,
+        p: Math.min(Number(page) + 1, Math.floor(result.total / 10) + 1),
+      };
     });
 
   const prevPage = () =>
-    setSearchParams({ page: page ? Math.max(Number(page) - 1, 1) : 1 });
+    setSearchParams((prev) => {
+      const params = Object.fromEntries(prev.entries());
+      return {
+        ...params,
+        p: Math.max(Number(page) - 1, 1),
+      };
+    });
 
   return (
     <main className="relative grid grid-cols-1 mx-10 py-20 lg:mx-56 md:grid-cols-2 lg:grid-cols-3">
@@ -27,7 +35,7 @@ export const Home = () => {
           <FiChevronLeft size={30} />
         </button>
         <span>
-          {page ?? 1} of {result.total / 10}
+          {page} of {Math.floor(result.total / 10) + 1}
         </span>
         <button onClick={nextPage}>
           <FiChevronRight size={30} />

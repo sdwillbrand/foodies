@@ -23,8 +23,9 @@ export const setupRouter = ({ logout }) =>
         {
           loader: async ({ request }) => {
             const url = new URL(request.url);
-            const page = url.searchParams.get("page");
-            const result = await getRecipes({ page });
+            const p = url.searchParams.get("p");
+            const q = url.searchParams.get("q");
+            const result = await getRecipes({ p, q });
             return result;
           },
           element: <Home />,
