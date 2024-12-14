@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 export const Login = () => {
-  const { login, isAuthenticated, user } = useContext(AuthContext);
+  const { login, isAuthenticated } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,7 +13,7 @@ export const Login = () => {
   };
 
   if (isAuthenticated) {
-    return <Navigate to={`/dashboard/${user._id}`} />;
+    return <Navigate to={`/dashboard`} />;
   }
 
   return (

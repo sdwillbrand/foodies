@@ -44,9 +44,9 @@ export const Header = () => {
                     isActive ? "underline underline-offset-2" : ""
                   } flex items-center gap-1`
                 }
-                to={`/dashboard/${user._id}`}
+                to={`/dashboard`}
               >
-                <span>Meine Rezepte</span>
+                <span>My recipes</span>
               </NavLink>
               <NavLink
                 className={({ isActive }) =>
@@ -54,9 +54,9 @@ export const Header = () => {
                     isActive ? "underline underline-offset-2" : ""
                   } flex items-center gap-1`
                 }
-                to={`/dashboard/${user._id}/new`}
+                to={`/dashboard/new`}
               >
-                <span>Neu</span>
+                <span>New</span>
                 <FiPlusCircle />
               </NavLink>
               <Form action="/logout" method="post">

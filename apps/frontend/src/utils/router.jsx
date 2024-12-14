@@ -14,7 +14,7 @@ import {
   deleteRecipe,
 } from "../services/recipe";
 
-export const setupRouter = ({ logout }) =>
+export const setupRouter = ({ logout, userId }) =>
   createBrowserRouter([
     {
       path: "/",
@@ -66,13 +66,14 @@ export const setupRouter = ({ logout }) =>
       ],
     },
     {
-      path: "/dashboard/:userId",
+      path: "/dashboard",
       element: <DashboardLayout />,
-      errorElement: <Navigate to="/" />,
+      // errorElement: <Navigate to="/" />,
       children: [
         {
-          loader: async ({ params }) => {
-            const recipes = await getRecipes({ userId: params.userId });
+          loader: async () => {
+            if (!userId) return [];
+            const recipes = await getRecipes({ userId: userId });
             return recipes;
           },
           index: true,

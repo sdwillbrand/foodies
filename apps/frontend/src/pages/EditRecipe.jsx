@@ -1,8 +1,9 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { RecipeForm } from "../components/recipe/RecipeForm";
 
 export const EditRecipe = () => {
   const initialRecipe = useLoaderData();
+  const navigate = useNavigate();
 
   const handleSubmit = async (recipe) => {
     const formData = new FormData();
@@ -23,7 +24,7 @@ export const EditRecipe = () => {
       );
 
       if (response.ok) {
-        // navigate("/dashboard");
+        navigate("/dashboard");
       } else {
         const error = await response.json();
         console.error("Failed to save recipe: " + error.message);

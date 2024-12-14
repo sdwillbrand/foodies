@@ -1,5 +1,7 @@
 import { useRef, useState, Fragment, useId } from "react";
 import { FiPlusSquare, FiMinusSquare, FiTrash } from "react-icons/fi";
+import classNames from "classnames";
+import equal from "fast-deep-equal";
 
 export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
   const [recipe, setRecipe] = useState(initialRecipe);
@@ -240,12 +242,24 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
         Zubereitungsschritt <FiPlusSquare />
       </button>
       <div className="w-full border-slate-200 border rounded-md"></div>
-      <button
-        className="p-1 rounded-md bg-sky-500 hover:bg-sky-400 text-white"
-        type="submit"
-      >
-        Speichern
-      </button>
+      <div className="flex flex-row gap-5">
+        <button className="p-1 rounded-md bg-slate-500 hover:bg-slate-400 text-white w-full">
+          Cancel
+        </button>
+        <button
+          className={classNames(
+            {
+              "bg-white text-white border border-black hover:bg-inherit text-inherit":
+                equal(initialRecipe, recipe),
+            },
+            "p-1 rounded-md bg-sky-500 hover:bg-sky-400 text-white w-full"
+          )}
+          type="submit"
+          disabled={equal(initialRecipe, recipe)}
+        >
+          Save
+        </button>
+      </div>
     </form>
   );
 };

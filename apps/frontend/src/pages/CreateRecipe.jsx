@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { RecipeForm } from "../components/recipe/RecipeForm";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
 
 export const CreateRecipe = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
   const handleSubmit = async (recipe) => {
     const formData = new FormData();
@@ -23,7 +20,7 @@ export const CreateRecipe = () => {
       });
 
       if (response.ok) {
-        navigate(`/dashboard/${user._id}`);
+        navigate(`/dashboard`);
       } else {
         const error = await response.json();
         console.error("Failed to save recipe: " + error.message);

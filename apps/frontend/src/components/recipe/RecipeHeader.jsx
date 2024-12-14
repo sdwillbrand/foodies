@@ -32,7 +32,7 @@ export const RecipeHeader = ({ recipe }) => {
         {recipe.public ? <FiEye /> : <FiEyeOff />}
       </button>
       <Link
-        to={`/dashboard/${recipe.user}/edit/${recipe.slug}`}
+        to={`/dashboard/edit/${recipe.slug}`}
         className="p-2 rounded-md bg-slate-500 text-white hover:bg-slate-400"
       >
         <FiEdit />

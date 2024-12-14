@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const defaultRecipe = {
-  bannerImage: Joi.string().optional(),
+  bannerImage: Joi.string().allow("").optional(),
   public: Joi.boolean().optional(),
   ingredients: Joi.string()
     .custom((value, helpers) => {
