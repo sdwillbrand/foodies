@@ -18,7 +18,7 @@ export const Recipe = () => {
           <div className="relative max-w-[675px] max-h-[500px] overflow-hidden rounded-md">
             <img
               className="w-full h-full object-cover"
-              src={`${import.meta.env.VITE_API_URL}/${recipe.bannerImage}`}
+              src={recipe.bannerImage}
               alt="Recipe Banner"
             />
           </div>

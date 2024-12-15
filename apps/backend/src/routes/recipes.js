@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { Recipe } from "../models/recipe.js";
 import { checkJWT, checkUser } from "../middlewares/checkJWT.js";
-import { upload } from "../middlewares/multer.js";
 import { validate } from "../middlewares/validate.js";
 import { putRecipeSchema } from "../schemas/recipe.js";
 
@@ -64,30 +63,15 @@ recipeRouter.get("/", async (req, res, next) => {
   }
 });
 
-recipeRouter.post(
-  "/",
-  checkJWT,
-  upload.single("bannerImage"),
-  async (req, res, next) => {
-    try {
-      // `req.body` now contains text fields, and `req.file` contains the uploaded file
-      const recipeData = {
-        title: req.body.title,
-        description: req.body.description,
-        user: req.user, // From your JWT middleware
-        bannerImage: req.file?.path, // File path of uploaded image
-        ingredients: JSON.parse(req.body.ingredients),
-        instructions: JSON.parse(req.body.instructions),
-      };
-
-      // Save the recipe to the database
-      const recipe = await Recipe.create(recipeData);
-      res.status(201).json(recipe);
-    } catch (error) {
-      next(error);
-    }
+recipeRouter.post("/", checkJWT, async (req, res, next) => {
+  try {
+    // Save the recipe to the database
+    const recipe = await Recipe.create(req.body);
+    res.status(201).json(recipe);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 recipeRouter.get("/:slug", checkUser, async (req, res, next) => {
   try {
@@ -133,7 +117,6 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
 
 recipeRouter.put(
   "/:id",
-  upload.single("bannerImage"),
   checkJWT,
   validate(putRecipeSchema),
   async (req, res, next) => {
@@ -144,19 +127,10 @@ recipeRouter.put(
       if (!recipe.user.equals(user)) {
         return res.sendStatus(403);
       }
-      const recipeData = {
-        title: req.body.title,
-        description: req.body.description,
-        user: req.user, // From your JWT middleware
-        bannerImage: req.file ? req.file.path : req.body.bannerImage, // File path of uploaded image
-        public: req.body.public,
-        ingredients: req.body.ingredients && JSON.parse(req.body.ingredients),
-        instructions:
-          req.body.instructions && JSON.parse(req.body.instructions),
-      };
+
       const newRecipe = await Recipe.findOneAndUpdate(
         { _id: id, user },
-        recipeData,
+        req.body,
         {
           new: true,
           runValidators: true,
@@ -169,9 +143,14 @@ recipeRouter.put(
   }
 );
 
-recipeRouter.delete("/:id", async (req, res, next) => {
+recipeRouter.delete("/:id", checkJWT, async (req, res, next) => {
   try {
     const id = req.params.id;
+    const user = req.user;
+    const recipe = await Recipe.findById(id);
+    if (!recipe.user.equals(user)) {
+      return res.sendStatus(403);
+    }
     await Recipe.findByIdAndDelete(id);
     return res.sendStatus(204);
   } catch (e) {

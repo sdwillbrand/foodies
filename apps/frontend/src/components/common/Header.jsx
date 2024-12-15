@@ -5,6 +5,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { Dropdown } from "./Dropdown";
 import { FiPlusCircle, FiLogOut } from "react-icons/fi";
 import { Searchbar } from "../Searchbar";
+import classNames from "classnames";
 
 export const Header = () => {
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -18,14 +19,13 @@ export const Header = () => {
       <div className="flex gap-5 p-5 md:mr-10">
         <NavLink
           className={({ isActive }) =>
-            `${
-              isActive ? "underline underline-offset-2" : ""
-            } flex items-center gap-1`
+            classNames("flex items-center gap-1", {
+              "text-amber-600": isActive,
+            })
           }
           to="/"
         >
-          <span>Discover</span>
-          <FiCompass />
+          <FiCompass size={30} strokeWidth={1} />
         </NavLink>
         {isAuthenticated && (
           <Dropdown

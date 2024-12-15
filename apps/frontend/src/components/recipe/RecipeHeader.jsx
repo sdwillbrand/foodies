@@ -1,5 +1,6 @@
 import { FiEdit, FiEye, FiEyeOff, FiTrash } from "react-icons/fi";
 import { useSubmit, Link, Form } from "react-router-dom";
+import { Modal } from "../common/Modal";
 
 export const RecipeHeader = ({ recipe }) => {
   const submit = useSubmit();
@@ -16,16 +17,28 @@ export const RecipeHeader = ({ recipe }) => {
 
   return (
     <div className="fixed top-0 right-0 flex flex-row mx-2 gap-2 pt-24">
-      <Form action={`/recipe/${recipe._id}`} method="DELETE">
-        <button
-          type="submit"
-          className="rounded-md p-2 bg-red-500 hover:bg-red-400 text-white"
-        >
-          <FiTrash />
-        </button>
-      </Form>
+      <Modal
+        label={
+          <div className="cursor-pointer rounded-md p-2 bg-red-500 hover:bg-red-400 text-white">
+            <FiTrash />
+          </div>
+        }
+      >
+        <Form action={`/recipe/${recipe._id}`} method="DELETE">
+          <div className="flex justify-center flex-col gap-5">
+            <p className="text-lg">Do you really want to delete the recipe?</p>
+            <button
+              id="deleteRecipe"
+              type="submit"
+              className="rounded-md p-2 bg-red-500 hover:bg-red-400 text-white"
+            >
+              Delete
+            </button>
+          </div>
+        </Form>
+      </Modal>
       <button
-        title={recipe.public ? "Veröffentlichen" : "Verheimlichen"}
+        title={recipe.public ? "Public" : "Private"}
         className="rounded-md p-2 bg-slate-500 hover:bg-slate-400 text-white"
         onClick={togglePublishRecipe}
       >

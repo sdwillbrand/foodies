@@ -12,7 +12,7 @@ export const RecipeCard = ({ recipe }) => {
         <div className="relative w-full max-h-[150px] overflow-hidden flex items-center justify-center rounded-t-md -z-10">
           <img
             className="w-full object-cover bg-center group-hover:scale-110 transition-transform duration-500"
-            src={`${import.meta.env.VITE_API_URL}/${recipe.bannerImage}`}
+            src={recipe.bannerImage}
           />
         </div>
       )}

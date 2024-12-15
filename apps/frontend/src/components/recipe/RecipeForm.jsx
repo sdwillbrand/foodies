@@ -21,12 +21,11 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
       // File upload
       const file = e.target.files[0];
       if (file) {
-        setRecipe((prev) => ({ ...prev, bannerImage: file }));
-
         // Generate a preview URL
         const reader = new FileReader();
         reader.onloadend = () => {
           setPreview(reader.result); // Set preview URL
+          setRecipe((prev) => ({ ...prev, [name]: reader.result }));
         };
         reader.readAsDataURL(file);
       }
@@ -249,8 +248,10 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
         <button
           className={classNames(
             {
-              "bg-white text-white border border-black hover:bg-inherit text-inherit":
-                equal(initialRecipe, recipe),
+              "cursor-not-allowed opacity-30 hover:bg-sky-500": equal(
+                initialRecipe,
+                recipe
+              ),
             },
             "p-1 rounded-md bg-sky-500 hover:bg-sky-400 text-white w-full"
           )}
