@@ -1,6 +1,7 @@
 import { RecipeCard } from "../components/RecipeCard";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import classNames from "classnames";
 
 export const Home = () => {
   const result = useLoaderData();
@@ -26,21 +27,36 @@ export const Home = () => {
     });
 
   return (
-    <main className="relative grid grid-cols-1 mx-10 py-20 lg:mx-56 md:grid-cols-2 lg:grid-cols-3">
+    <main className="grid grid-cols-1 mx-10 py-20 lg:mx-56 md:grid-cols-2 lg:grid-cols-3">
       {result.recipes.length === 0 && (
         <p>Hm... Could not find any recipes...</p>
       )}
       {result.recipes.map((recipe) => (
         <RecipeCard key={recipe._id} recipe={recipe} />
       ))}
-      <div className="col-span-1 lg:col-span-3 justify-self-center flex items-center gap-2">
-        <button onClick={prevPage}>
+      <div className="fixed bottom-0 bg-white w-full col-span-1 lg:col-span-3 justify-self-center justify-center flex gap-10 md:gap-2 p-10 sm:p-5 border-t">
+        <button
+          onClick={prevPage}
+          className={classNames(
+            "border-r w-full flex justify-center items-center",
+            { "opacity-30 cursor-not-allowed": page === 1 }
+          )}
+        >
           <FiChevronLeft size={30} />
         </button>
-        <span>
+        <p className="min-w-16 flex justify-center">
           {page} of {Math.floor(result.total / 10) || 1}
-        </span>
-        <button onClick={nextPage}>
+        </p>
+        <button
+          onClick={nextPage}
+          className={classNames(
+            "border-l w-full flex justify-center items-center",
+            {
+              "opacity-30 cursor-not-allowed":
+                page === Math.floor(result.total / 10),
+            }
+          )}
+        >
           <FiChevronRight size={30} />
         </button>
       </div>

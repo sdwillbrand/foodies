@@ -20,7 +20,7 @@ export const Header = () => {
         <NavLink
           className={({ isActive }) =>
             classNames("flex items-center gap-1", {
-              "text-amber-600": isActive,
+              "text-blue-600": isActive,
             })
           }
           to="/"
