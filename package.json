@@ -19,7 +19,6 @@
     "./apps/backend"
   ],
   "dependencies": {
-    "concurrently": "^9.0.1",
-    "joi": "^17.13.3"
+    "concurrently": "^9.0.1"
   }
 }
