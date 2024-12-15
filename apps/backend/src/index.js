@@ -4,13 +4,17 @@ import cookieParser from "cookie-parser";
 import { recipeRouter } from "./routes/recipes.js";
 import { authRouter } from "./routes/auth.js";
 import { connectToDB } from "./db.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+const ORIGIN = process.env.ORIGIN;
 
 const app = express();
 // Middleware stack
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: [ORIGIN],
   })
 );
 app.use(cookieParser());

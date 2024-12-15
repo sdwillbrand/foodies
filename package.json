@@ -4,8 +4,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently 'npm:dev:*'",
+    "start": "concurrently 'npm:dev:*'",
     "dev:backend": "cd apps/backend && npm run dev",
-    "dev:frontend": "cd apps/frontend && npm run dev"
+    "dev:frontend": "cd apps/frontend && npm run dev",
+    "start:backend": "cd apps/backend && npm start",
+    "star:frontend": "cd apps/frontend && npm run preview"
   },
   "keywords": [],
   "author": "",

@@ -7,7 +7,7 @@ export async function connectToDB() {
   if (!MONGODB_URI) {
     throw new Error("Error: ENV not existing");
   }
-  await mongoose.connect(`mongodb://${MONGODB_URI}`, {
+  await mongoose.connect(`mongodb+srv://${MONGODB_URI}`, {
     user: DB_USERNAME,
     pass: DB_PASSWORD,
   });
