@@ -46,7 +46,13 @@ export const postRecipeSchema = Joi.object({
   ...defaultRecipe,
 });
 
+const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+
 export const putRecipeSchema = Joi.object({
+  _id: Joi.string().pattern(objectIdPattern).required().messages({
+    "string.pattern.base": "Invalid MongoDB ObjectId format",
+    "any.required": "_id is required to update the recipe",
+  }),
   title: Joi.string().optional().messages({
     "string.empty": "Title is required",
   }),
