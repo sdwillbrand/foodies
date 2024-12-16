@@ -7,7 +7,7 @@ import { connectToDB } from "./db.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const ORIGIN = process.env.ORIGIN;
+const ORIGIN = process.env.ORIGIN || "http://localhost:5173";
 
 const app = express();
 // Middleware stack
@@ -16,6 +16,7 @@ app.use(
     credentials: true,
     origin: [ORIGIN],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(cookieParser());
