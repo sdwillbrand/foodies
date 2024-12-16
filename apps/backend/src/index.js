@@ -5,6 +5,8 @@ import { recipeRouter } from "./routes/recipes.js";
 import { authRouter } from "./routes/auth.js";
 import { connectToDB } from "./db.js";
 import dotenv from "dotenv";
+import morgan from "morgan";
+
 dotenv.config();
 
 const ORIGIN = process.env.ORIGIN || "http://localhost:5173";
@@ -16,6 +18,7 @@ const corsOptions = {
 };
 
 const app = express();
+app.use(morgan("short"));
 // Middleware stack
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));

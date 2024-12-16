@@ -28,7 +28,6 @@ export async function logout() {
 export async function checkStatus() {
   try {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/status`, {
-      method: "GET",
       credentials: "include",
     });
     const user = await res.json();
