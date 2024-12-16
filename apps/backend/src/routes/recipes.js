@@ -116,33 +116,28 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
   }
 });
 
-recipeRouter.put(
-  "/:id",
-  checkJWT,
-  validate(putRecipeSchema),
-  async (req, res, next) => {
-    try {
-      const id = req.params.id;
-      const user = req.user;
-      const recipe = await Recipe.findById(id);
-      if (!recipe.user.equals(user)) {
-        return res.sendStatus(403);
-      }
-
-      const newRecipe = await Recipe.findOneAndUpdate(
-        { _id: id, user },
-        req.body,
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-      return res.json(newRecipe);
-    } catch (e) {
-      next(e);
+recipeRouter.put("/:id", checkJWT, async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const user = req.user;
+    const recipe = await Recipe.findById(id);
+    if (!recipe.user.equals(user)) {
+      return res.sendStatus(403);
     }
+
+    const newRecipe = await Recipe.findOneAndUpdate(
+      { _id: id, user },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return res.json(newRecipe);
+  } catch (e) {
+    next(e);
   }
-);
+});
 
 recipeRouter.delete("/:id", checkJWT, async (req, res, next) => {
   try {
