@@ -42,8 +42,9 @@ authRouter.post("/login", async (req, res) => {
   res.cookie("jwt", token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
     expires: new Date(Date.now() + 900000),
+    domain: process.env.ORIGIN,
   });
   res.json(user);
 });
