@@ -66,6 +66,7 @@ recipeRouter.get("/", async (req, res, next) => {
 recipeRouter.post("/", checkJWT, async (req, res, next) => {
   try {
     // Save the recipe to the database
+    req.body.user = req.user;
     const recipe = await Recipe.create(req.body);
     res.status(201).json(recipe);
   } catch (error) {
