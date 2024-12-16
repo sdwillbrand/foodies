@@ -6,20 +6,16 @@ export const EditRecipe = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (recipe) => {
-    const formData = new FormData();
-
-    formData.append("title", recipe.title);
-    formData.append("description", recipe.description);
-    formData.append("bannerImage", recipe.bannerImage);
-    formData.append("ingredients", JSON.stringify(recipe.ingredients));
-    formData.append("instructions", JSON.stringify(recipe.instructions));
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/recipes/${recipe._id}`,
         {
           method: "PUT",
           credentials: "include",
-          body: formData,
+          body: JSON.stringify(recipe),
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
 
