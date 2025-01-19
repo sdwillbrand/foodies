@@ -22,7 +22,7 @@ export const RecipeCard = ({ recipe }) => {
       </div>
       <div className="flex p-2 gap-2">
         {recipe.tags.map((tag) => (
-          <Badge key={tag}>{tag.name}</Badge>
+          <Badge key={tag._id}>{tag.name}</Badge>
         ))}
       </div>
     </Link>

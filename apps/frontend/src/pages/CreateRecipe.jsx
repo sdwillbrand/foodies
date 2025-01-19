@@ -36,6 +36,7 @@ export const CreateRecipe = () => {
           bannerImage: null, // For storing the file itself,
           ingredients: [],
           instructions: [],
+          tags: [],
         }}
         onSubmit={handleSubmit}
       />

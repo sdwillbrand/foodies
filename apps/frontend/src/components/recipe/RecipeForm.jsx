@@ -92,6 +92,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
       ...prev,
       tags: [...prev.tags, tag],
     }));
+    setTags([]);
   };
 
   const handleRemoveTags = (index) => () => {
@@ -232,15 +233,13 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
         Zutat <FiPlusSquare />
       </button>
       <div className="w-full border-slate-200 border rounded-md"></div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="flex flex-col gap-2">
         <label className="text-sm text-slate-400 col-span-full">
           Beschreibung
         </label>
-        {recipe.instructions.length === 0 && (
-          <p className="col-span-4">Füge eine Anleitung hinzu!</p>
-        )}
+        {recipe.instructions.length === 0 && <p>Füge eine Anleitung hinzu!</p>}
         {recipe.instructions.map((instructions, index) => (
-          <div key={index} className="col-span-3 flex gap-1">
+          <div key={index} className="flex gap-1">
             <p>{index + 1}.</p>
             <textarea
               required
@@ -278,11 +277,12 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
             onChange={queryTags}
           />
           {tags.length > 0 && (
-            <div className="absolute bg-white w-full border rounded-md p-1 mt-1 overflow-scroll">
+            <div className="absolute bg-white w-full border rounded-md mt-1 overflow-scroll">
               {tags.map((tag) => (
                 <option
                   key={tag._id}
                   value={tag.name}
+                  className="cursor-pointer hover:bg-slate-400/20 p-1"
                   onClick={handleAddTags(tag)}
                 >
                   {tag.name}
