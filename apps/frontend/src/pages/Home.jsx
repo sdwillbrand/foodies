@@ -28,6 +28,7 @@ export const Home = () => {
     });
   return (
     <main className="grid grid-cols-1 mx-10 py-20 lg:mx-56 md:grid-cols-2 lg:grid-cols-3">
+      <h1 className="col-span-full text-3xl mt-5">Discover new recipes</h1>
       <Suspense fallback={<p>Loading recipes...</p>}>
         <Await
           resolve={result.data}

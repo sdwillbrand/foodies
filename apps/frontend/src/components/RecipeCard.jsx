@@ -20,7 +20,7 @@ export const RecipeCard = ({ recipe }) => {
         <h1 className="text-3xl pb-5">{recipe.title}</h1>
         <p className="text-slate-500 line-clamp-2">{recipe.description}</p>
       </div>
-      <div className="flex p-2">
+      <div className="flex p-2 gap-2">
         {recipe.tags.map((tag) => (
           <Badge key={tag}>{tag.name}</Badge>
         ))}

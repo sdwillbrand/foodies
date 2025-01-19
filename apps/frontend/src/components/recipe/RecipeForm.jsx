@@ -2,11 +2,13 @@ import { useRef, useState, Fragment, useId } from "react";
 import { FiPlusSquare, FiMinusSquare, FiTrash } from "react-icons/fi";
 import classNames from "classnames";
 import equal from "fast-deep-equal";
+import { getTags } from "../../services/tag.js";
 
 export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
   const [recipe, setRecipe] = useState(initialRecipe);
   const [preview, setPreview] = useState(initialRecipe.bannerImage);
   const bannerImageRef = useRef(null);
+  const [tags, setTags] = useState([]);
   const id = useId();
 
   const handleSubmit = (e) => {
@@ -85,10 +87,33 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
     });
   };
 
+  const handleAddTags = (tag) => () => {
+    setRecipe((prev) => ({
+      ...prev,
+      tags: [...prev.tags, tag],
+    }));
+  };
+
+  const handleRemoveTags = (index) => () => {
+    setRecipe((prev) => ({
+      ...prev,
+      tags: [...prev.tags.slice(0, index), ...prev.tags.slice(index + 1)],
+    }));
+  };
+
   const handleRemoveBanner = () => {
     setPreview("");
     setRecipe((prev) => ({ ...prev, bannerImage: "" }));
     bannerImageRef.current.value = "";
+  };
+
+  const queryTags = (event) => {
+    const tagQuery = event.target.value;
+    if (tagQuery.length > 3) {
+      getTags(tagQuery).then((res) => setTags(res));
+    } else {
+      setTags([]);
+    }
   };
 
   return (
@@ -113,6 +138,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
           required
           className="border p-1 rounded-md"
           cols={50}
+          rows={5}
           name="description"
           defaultValue={recipe.description}
           placeholder="Oma's Pfannkuchen"
@@ -207,8 +233,9 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
       </button>
       <div className="w-full border-slate-200 border rounded-md"></div>
       <div className="grid grid-cols-4 gap-2">
-        <label className="text-sm text-slate-400">Beschreibung</label>
-        <label className="text-sm text-slate-400"></label>
+        <label className="text-sm text-slate-400 col-span-full">
+          Beschreibung
+        </label>
         {recipe.instructions.length === 0 && (
           <p className="col-span-4">Füge eine Anleitung hinzu!</p>
         )}
@@ -219,6 +246,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
               required
               className="border p-1 rounded-md"
               cols={50}
+              rows={5}
               name="description"
               value={instructions.description}
               onChange={(e) => {
@@ -240,6 +268,47 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
       >
         Zubereitungsschritt <FiPlusSquare />
       </button>
+      <div className="w-full border-slate-200 border rounded-md"></div>
+      <div className="grid grid-cols-4 gap-2">
+        <label className="text-sm text-slate-400 col-span-full">Tags</label>
+        <div className="relative col-span-full">
+          <input
+            type="text"
+            className="rounded-md border-slate-200 border p-1"
+            onChange={queryTags}
+          />
+          {tags.length > 0 && (
+            <div className="absolute bg-white w-full border rounded-md p-1 mt-1 overflow-scroll">
+              {tags.map((tag) => (
+                <option
+                  key={tag._id}
+                  value={tag.name}
+                  onClick={handleAddTags(tag)}
+                >
+                  {tag.name}
+                </option>
+              ))}
+            </div>
+          )}
+        </div>
+        {recipe.tags.length === 0 && (
+          <p className="col-span-4">Füge Tags hinzu!</p>
+        )}
+        {recipe.tags.map((tag, index) => (
+          <div key={tag._id} className="col-span-3 flex gap-1 ">
+            <div
+              className="border p-1 rounded-md bg-blue-500 text-white"
+              name="name"
+              placeholder="Desert"
+            >
+              {tag.name}
+            </div>
+            <button type="button" onClick={handleRemoveTags(index)}>
+              <FiMinusSquare className="transition-colors text-[rgba(255,0,0)]" />
+            </button>
+          </div>
+        ))}
+      </div>
       <div className="w-full border-slate-200 border rounded-md"></div>
       <div className="flex flex-row gap-5">
         <button className="p-1 rounded-md bg-slate-500 hover:bg-slate-400 text-white w-full">

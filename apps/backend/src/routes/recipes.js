@@ -4,9 +4,9 @@ import { checkJWT, checkUser } from "../middlewares/checkJWT.js";
 import { validate } from "../middlewares/validate.js";
 import { putRecipeSchema } from "../schemas/recipe.js";
 
-export const recipeRouter = Router();
+export const recipesRouter = Router();
 
-recipeRouter.get("/", async (req, res, next) => {
+recipesRouter.get("/", async (req, res, next) => {
   try {
     const p = parseInt(req.query.p) || 1;
     const size = req.query.size ?? 10;
@@ -63,7 +63,7 @@ recipeRouter.get("/", async (req, res, next) => {
   }
 });
 
-recipeRouter.post("/", checkJWT, async (req, res, next) => {
+recipesRouter.post("/", checkJWT, async (req, res, next) => {
   try {
     // Save the recipe to the database
     req.body.user = req.user;
@@ -74,7 +74,7 @@ recipeRouter.post("/", checkJWT, async (req, res, next) => {
   }
 });
 
-recipeRouter.get("/:slug", checkUser, async (req, res, next) => {
+recipesRouter.get("/:slug", checkUser, async (req, res, next) => {
   try {
     const slug = req.params.slug;
     const query = {
@@ -86,7 +86,7 @@ recipeRouter.get("/:slug", checkUser, async (req, res, next) => {
       delete query.public;
       query.user = req.user;
     }
-    const recipe = await Recipe.findOne(query);
+    const recipe = await Recipe.findOne(query).populate("tags");
     if (!recipe) {
       return res.sendStatus(404);
     }
@@ -96,7 +96,7 @@ recipeRouter.get("/:slug", checkUser, async (req, res, next) => {
   }
 });
 
-recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
+recipesRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
   try {
     const p = req.query.p ?? 1;
     const size = req.query.size ?? 10;
@@ -116,7 +116,7 @@ recipeRouter.get("/:userId/all", checkJWT, async (req, res, next) => {
   }
 });
 
-recipeRouter.put("/:id", checkJWT, async (req, res, next) => {
+recipesRouter.put("/:id", checkJWT, async (req, res, next) => {
   try {
     const id = req.params.id;
     const user = req.user;
@@ -124,7 +124,6 @@ recipeRouter.put("/:id", checkJWT, async (req, res, next) => {
     if (!recipe.user.equals(user)) {
       return res.sendStatus(403);
     }
-
     const newRecipe = await Recipe.findOneAndUpdate(
       { _id: id, user },
       req.body,
@@ -139,7 +138,7 @@ recipeRouter.put("/:id", checkJWT, async (req, res, next) => {
   }
 });
 
-recipeRouter.delete("/:id", checkJWT, async (req, res, next) => {
+recipesRouter.delete("/:id", checkJWT, async (req, res, next) => {
   try {
     const id = req.params.id;
     const user = req.user;

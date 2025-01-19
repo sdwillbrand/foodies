@@ -11,4 +11,6 @@ export const TagSchema = new Schema(
   { timestamps: true }
 );
 
+TagSchema.index({ name: "text" });
+
 export const Tag = model("tag", TagSchema);

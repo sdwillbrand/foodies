@@ -8,7 +8,7 @@ export const Recipe = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const recipe = useLoaderData();
   return (
-    <main className="flex flex-col lg:mx-40 pt-24 mx-10">
+    <main className="flex flex-col lg:mx-[20rem] pt-24 mx-10">
       {isAuthenticated && <RecipeHeader recipe={recipe} />}
       <h1 className="text-5xl font-semibold from-transparent to-current transition-opacity self-center">
         {recipe.title}
@@ -26,7 +26,7 @@ export const Recipe = () => {
         <p className="mt-5">{recipe.description}</p>
       </section>
       <section className="my-5">
-        <h2 className="text-2xl font-bold">Zutaten</h2>
+        <h2 className="text-3xl font-bold">Zutaten</h2>
         <ol className="mt-2 flex flex-col gap-2">
           {recipe.ingredients.map((ingredient, index) => (
             <li key={index}>
@@ -40,10 +40,10 @@ export const Recipe = () => {
         </ol>
       </section>
       <section className="my-5">
-        <h2 className="text-2xl font-bold">Zubereitung</h2>
-        <ol className="mt-2 flex flex-col gap-2">
+        <h2 className="text-3xl font-bold">Zubereitung</h2>
+        <ol className="mt-2 flex flex-col gap-5">
           {recipe.instructions.map((instruction, index) => (
-            <li key={index}>
+            <li key={index} className="text-2xl">
               {index + 1}. {instruction.description}
             </li>
           ))}

@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { recipeRouter } from "./routes/recipes.js";
+import { recipesRouter } from "./routes/recipes.js";
 import { authRouter } from "./routes/auth.js";
 import { connectToDB } from "./db.js";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import { tagsRouter } from "./routes/tags.js";
 
 dotenv.config();
 
@@ -27,8 +28,9 @@ app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 
 app.get("/api/health", (req, res) => res.send("Ok"));
-app.use("/api/recipes", recipeRouter);
+app.use("/api/recipes", recipesRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/tags", tagsRouter);
 
 app.use((error, request, response, next) => {
   console.error(error);
