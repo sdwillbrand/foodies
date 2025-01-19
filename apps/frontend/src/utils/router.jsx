@@ -1,4 +1,9 @@
-import { createBrowserRouter, Navigate, redirect } from "react-router-dom";
+import {
+  createBrowserRouter,
+  defer,
+  Navigate,
+  redirect,
+} from "react-router-dom";
 import { Home } from "../pages/Home";
 import { Recipe } from "../pages/Recipe";
 import { EditRecipe } from "../pages/EditRecipe";
@@ -21,11 +26,12 @@ export const setupRouter = ({ logout, userId }) =>
       element: <Layout />,
       children: [
         {
-          loader: async ({ request }) => {
+          loader: ({ request }) => {
             const url = new URL(request.url);
             const p = url.searchParams.get("p");
             const q = url.searchParams.get("q");
-            return getRecipes({ p, q });
+            const data = getRecipes({ p, q });
+            return defer({ data });
           },
           element: <Home />,
           index: true,

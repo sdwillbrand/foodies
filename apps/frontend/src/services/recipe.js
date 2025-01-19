@@ -15,7 +15,7 @@ export async function getRecipes(opt) {
     return result;
   } catch (e) {
     console.error(e);
-    return [];
+    return { recipes: [], total: 0 };
   }
 }
 
