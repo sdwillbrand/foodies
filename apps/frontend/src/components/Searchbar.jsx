@@ -1,11 +1,11 @@
 import { FiSearch } from "react-icons/fi";
-import { useSearchParams } from "react-router-dom";
+import { Form, useSearchParams } from "react-router-dom";
 
 export const Searchbar = () => {
   const [searchParams] = useSearchParams();
 
   return (
-    <form action="/">
+    <Form action="/">
       <div className="bg-white flex items-center space-x-2 pr-2 rounded-xl">
         <input
           className="flex-grow rounded-xl focus:outline-none p-2"
@@ -15,6 +15,6 @@ export const Searchbar = () => {
         />
         <FiSearch className="text-gray-500" />
       </div>
-    </form>
+    </Form>
   );
 };

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Form, Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 export const Login = () => {
@@ -19,7 +19,7 @@ export const Login = () => {
   return (
     <main className="w-full h-full flex items-center justify-center flex-col pt-20">
       <h1 className="text-2xl mt-5">Login</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col mt-5 p-2 gap-2">
+      <Form onSubmit={handleSubmit} className="flex flex-col mt-5 p-2 gap-2">
         <input
           className="p-3 border rounded-lg"
           name="username"
@@ -36,7 +36,7 @@ export const Login = () => {
         <button className="p-2 border rounded-lg bg-primary hover:bg-primary/50">
           Login
         </button>
-      </form>
+      </Form>
     </main>
   );
 };
