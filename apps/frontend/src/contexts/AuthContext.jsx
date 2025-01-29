@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const user = await authService.checkStatus();
-      setUser(user);
+      if (user) setUser(user);
     } catch (e) {
       console.error(e);
       setUser(undefined);

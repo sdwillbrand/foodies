@@ -56,7 +56,6 @@ recipesRouter.get("/", async (req, res, next) => {
     // Extract the total count and paginated data
     const total = result.total[0]?.count || 0; // Total count of matching documents
     const recipes = result.data; // Paginated recipes
-
     return res.json({ recipes, total });
   } catch (e) {
     next(e);

@@ -30,6 +30,9 @@ export async function checkStatus() {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/status`, {
       credentials: "include",
     });
+    if (res.status >= 400) {
+      return false;
+    }
     const user = await res.json();
     return user;
   } catch (e) {
