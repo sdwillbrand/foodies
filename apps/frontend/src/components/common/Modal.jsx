@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { FiX } from "react-icons/fi";
 import { useClickOutside } from "../../hooks/useClickOutside.js";
 
-export const Modal = ({ children, label }) => {
+export const Modal = ({ label, content }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
   useClickOutside(ref, () => setOpen(false));
@@ -19,7 +19,7 @@ export const Modal = ({ children, label }) => {
       </div>
       <div
         className={classNames(
-          "w-full h-full flex items-center justify-center fixed left-0 top-0 bg-black/20",
+          "w-full h-full flex items-center justify-center fixed left-0 top-0 bg-black/20 z-10",
           open ? "opacity-100" : "opacity-0 invisible"
         )}
       >
@@ -28,7 +28,7 @@ export const Modal = ({ children, label }) => {
             className="absolute right-1 top-1 hover:scale-110 transition-transform cursor-pointer"
             onClick={() => setOpen(false)}
           />
-          {children}
+          {content({ setOpen })}
         </div>
       </div>
     </div>

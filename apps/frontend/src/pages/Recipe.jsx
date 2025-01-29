@@ -15,7 +15,7 @@ export const Recipe = () => {
       </h1>
       <section className="flex flex-col md:flex-row mt-16 gap-5">
         {recipe.bannerImage && (
-          <div className="relative max-w-[675px] max-h-[500px] overflow-hidden rounded-md">
+          <div className="relative max-w-[675px] max-h-[500px] overflow-hidden rounded-md -z-10">
             <img
               className="w-full h-full object-cover"
               src={recipe.bannerImage}

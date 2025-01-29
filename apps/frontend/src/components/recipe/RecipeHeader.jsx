@@ -23,20 +23,31 @@ export const RecipeHeader = ({ recipe }) => {
             <FiTrash />
           </div>
         }
-      >
-        <Form action={`/recipe/${recipe._id}`} method="DELETE">
+        content={({ setOpen }) => (
           <div className="flex justify-center flex-col gap-5">
             <p className="text-lg">Do you really want to delete the recipe?</p>
-            <button
-              id="deleteRecipe"
-              type="submit"
-              className="rounded-md p-2 bg-red-500 hover:bg-red-400 text-white"
-            >
-              Delete
-            </button>
+            <div className="flex justify-between">
+              <button
+                id="deleteRecipe"
+                type="submit"
+                className="rounded-md p-2 bg-slate-500 hover:bg-slate-400 text-white"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+              <Form action={`/recipe/${recipe._id}`} method="DELETE">
+                <button
+                  id="deleteRecipe"
+                  type="submit"
+                  className="rounded-md p-2 bg-red-500 hover:bg-red-400 text-white"
+                >
+                  Delete
+                </button>
+              </Form>
+            </div>
           </div>
-        </Form>
-      </Modal>
+        )}
+      />
       <button
         title={recipe.public ? "Public" : "Private"}
         className="rounded-md p-2 bg-slate-500 hover:bg-slate-400 text-white"
