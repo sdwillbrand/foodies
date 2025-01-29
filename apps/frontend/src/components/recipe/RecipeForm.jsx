@@ -110,7 +110,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
 
   const queryTags = (event) => {
     const tagQuery = event.target.value;
-    if (tagQuery.length > 3) {
+    if (tagQuery.length > 2) {
       getTags(tagQuery).then((res) => setTags(res));
     } else {
       setTags([]);

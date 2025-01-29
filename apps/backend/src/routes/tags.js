@@ -15,11 +15,7 @@ tagsRouter.post("/", async (req, res, next) => {
 tagsRouter.get("/", async (req, res, next) => {
   try {
     const search = req.query.search;
-    const result = await Tag.find({
-      $text: {
-        $search: search,
-      },
-    }).limit(10);
+    const result = await Tag.find({ name: { $regex: search } }).limit(10);
     return res.json(result);
   } catch (e) {
     next(e);
