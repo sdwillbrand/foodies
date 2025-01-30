@@ -124,17 +124,17 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
       onSubmit={handleSubmit}
     >
       <div className="flex flex-col">
-        <label className="text-sm text-slate-400">Titel</label>
+        <label className="text-sm text-slate-400">Title</label>
         <input
           required
           className="border p-1 rounded-md"
           name="title"
           defaultValue={recipe.title}
-          placeholder="Pfannkuchen"
+          placeholder="Add a title..."
         />
       </div>
       <div className="flex flex-col">
-        <label className="text-sm text-slate-400">Beschreibung</label>
+        <label className="text-sm text-slate-400">Description</label>
         <textarea
           required
           className="border p-1 rounded-md"
@@ -142,7 +142,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
           rows={5}
           name="description"
           defaultValue={recipe.description}
-          placeholder="Oma's Pfannkuchen"
+          placeholder="Add a description..."
         />
       </div>
       <div className="flex flex-col">
@@ -174,11 +174,11 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
       <div className="w-full border-slate-200 border"></div>
       <div className="grid grid-cols-4 gap-2">
         <label className="text-sm text-slate-400">Name</label>
-        <label className="text-sm text-slate-400">Anzahl</label>
-        <label className="text-sm text-slate-400">Einheit</label>
+        <label className="text-sm text-slate-400">Quantity</label>
+        <label className="text-sm text-slate-400">Unit</label>
         <label className="text-sm text-slate-400"></label>
         {recipe.ingredients.length === 0 && (
-          <p className="col-span-4">Füge Zutaten hinzu!</p>
+          <p className="col-span-4">Add ingredients!</p>
         )}
         {recipe.ingredients.map((ingredient, index) => (
           <Fragment key={id + index}>
@@ -190,7 +190,6 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
               onChange={(e) => {
                 handleChangeIngredient(index, e.target.name, e.target.value);
               }}
-              placeholder="Eier"
             />
             <input
               required
@@ -201,7 +200,6 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
               onChange={(e) => {
                 handleChangeIngredient(index, e.target.name, e.target.value);
               }}
-              placeholder="2"
             />
             <select
               className="border p-1 rounded-md"
@@ -210,7 +208,6 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
               onChange={(e) => {
                 handleChangeIngredient(index, e.target.name, e.target.value);
               }}
-              placeholder="Stück"
             >
               <option value={undefined}></option>
               {["ml", "l", "g", "kg", "Prise", "EL", "TL"].map((unit) => (
@@ -230,14 +227,14 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
         className="flex items-center gap-2 border rounded-md self-start p-1 border-blue-600 hover:bg-blue-600/70 hover:text-white transition-colors"
         onClick={handleAddIngredient}
       >
-        Zutat <FiPlusSquare />
+        Ingredient <FiPlusSquare />
       </button>
       <div className="w-full border-slate-200 border rounded-md"></div>
       <div className="flex flex-col gap-2">
         <label className="text-sm text-slate-400 col-span-full">
-          Beschreibung
+          Description
         </label>
-        {recipe.instructions.length === 0 && <p>Füge eine Anleitung hinzu!</p>}
+        {recipe.instructions.length === 0 && <p>Add instruction!</p>}
         {recipe.instructions.map((instructions, index) => (
           <div key={index} className="flex gap-1">
             <p>{index + 1}.</p>
@@ -252,7 +249,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
                 e.stopPropagation();
                 handleChangeInstruction(index, e.target.name, e.target.value);
               }}
-              placeholder="Milch und Eier zusammenrühren"
+              placeholder="Write your instruction..."
             />
             <button type="button" onClick={handleRemoveInstruction(index)}>
               <FiMinusSquare className="transition-colors text-[rgba(255,0,0)]" />
@@ -265,7 +262,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
         className="flex items-center gap-2 border rounded-md self-start p-1 border-blue-600 hover:bg-blue-600/70 hover:text-white transition-colors"
         onClick={handleAddInstruction}
       >
-        Zubereitungsschritt <FiPlusSquare />
+        Instruction <FiPlusSquare />
       </button>
       <div className="w-full border-slate-200 border rounded-md"></div>
       <div className="grid grid-cols-4 gap-2">
@@ -291,9 +288,7 @@ export const RecipeForm = ({ onSubmit, recipe: initialRecipe }) => {
             </div>
           )}
         </div>
-        {recipe.tags.length === 0 && (
-          <p className="col-span-4">Füge Tags hinzu!</p>
-        )}
+        {recipe.tags.length === 0 && <p className="col-span-4">Add tags!</p>}
         {recipe.tags.map((tag, index) => (
           <div key={tag._id} className="col-span-3 flex gap-1 ">
             <div

@@ -10,12 +10,14 @@ export const RecipeSchema = new Schema(
     title: {
       type: String,
       required: true,
+      minLength: 3,
+      maxLength: 50,
     },
     slug: {
       type: String,
       unique: true,
     },
-    description: String,
+    description: { type: String, maxLength: 500 },
     bannerImage: String,
     ingredients: [IngredientSchema],
     instructions: [InstructionSchema],
@@ -41,7 +43,7 @@ export const RecipeSchema = new Schema(
 RecipeSchema.pre("save", function (next) {
   const slug = toKebab(this.title);
   this.slug = slug;
-  return next();
+  next();
 });
 
 RecipeSchema.post("save", async function (res, next) {

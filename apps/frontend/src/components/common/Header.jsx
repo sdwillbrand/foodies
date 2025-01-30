@@ -6,6 +6,7 @@ import { Dropdown } from "./Dropdown";
 import { FiPlusCircle, FiLogOut } from "react-icons/fi";
 import { Searchbar } from "../Searchbar";
 import classNames from "classnames";
+import logo from "../../assets/index.png";
 
 export const Header = () => {
   const { isAuthenticated, user } = useContext(AuthContext);
@@ -13,7 +14,7 @@ export const Header = () => {
   return (
     <header className="fixed top-0 bg-primary w-full flex justify-between items-center h-20 z-50">
       <Link className="font-mono font-bold ml-10" to="/">
-        FOODIES
+        <img src={logo} width={80} />
       </Link>
       <Searchbar />
       <div className="flex gap-5 p-5 md:mr-10">

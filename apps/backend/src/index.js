@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { recipesRouter } from "./routes/recipes.js";
-import { authRouter } from "./routes/auth.js";
-import { connectToDB } from "./db.js";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import { recipesRouter } from "./routes/recipes.js";
+import { authRouter } from "./routes/auth.js";
 import { tagsRouter } from "./routes/tags.js";
+import { connectToDB } from "./db.js";
 
 dotenv.config();
 

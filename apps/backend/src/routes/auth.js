@@ -10,14 +10,13 @@ export const authRouter = Router();
 
 authRouter.post("/register", async (req, res) => {
   const { username, nickname, password } = req.body;
-  if (!username) {
-    res.sendStatus(404);
-    return;
+  if (!username || !password) {
+    return res.sendStatus(404);
   }
   const sha256 = createHash("sha256");
   const hash = sha256.update(password).digest("hex");
   await User.create({ username, nickname, password: hash });
-  res.sendStatus(201);
+  return res.sendStatus(201);
 });
 
 authRouter.post("/login", async (req, res) => {
@@ -29,14 +28,12 @@ authRouter.post("/login", async (req, res) => {
     },
   });
   if (!user) {
-    res.sendStatus(404);
-    return;
+    return res.sendStatus(404);
   }
   const sha256 = createHash("sha256");
   const hash = sha256.update(password).digest("hex");
   if (user.password !== hash) {
-    res.sendStatus(401);
-    return;
+    return res.sendStatus(401);
   }
   const token = issueJwt(user);
   res.cookie("jwt", token, {
@@ -45,7 +42,7 @@ authRouter.post("/login", async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     expires: new Date(Date.now() + 900000),
   });
-  res.json(user);
+  return res.json(user);
 });
 
 authRouter.get("/logout", async (req, res) => {

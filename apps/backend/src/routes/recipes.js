@@ -67,7 +67,7 @@ recipesRouter.post("/", checkJWT, async (req, res, next) => {
     // Save the recipe to the database
     req.body.user = req.user;
     const recipe = await Recipe.create(req.body);
-    res.status(201).json(recipe);
+    return res.status(201).json(recipe);
   } catch (error) {
     next(error);
   }
@@ -76,18 +76,13 @@ recipesRouter.post("/", checkJWT, async (req, res, next) => {
 recipesRouter.get("/:slug", checkUser, async (req, res, next) => {
   try {
     const slug = req.params.slug;
-    const query = {
-      slug,
-      public: true,
-    };
-    // Allow access to private recipe
-    if (req.user) {
-      delete query.public;
-      query.user = req.user;
-    }
-    const recipe = await Recipe.findOne(query).populate("tags");
+    const recipe = await Recipe.findOne({ slug }).populate("tags");
     if (!recipe) {
       return res.sendStatus(404);
+    }
+    // Wenn das Rezept privat ist und nicht dem User gehört, dann brich die Anfrage ab
+    if (!recipe.public && recipe.user !== req.user) {
+      return res.sendStatus(401);
     }
     return res.json(recipe);
   } catch (e) {
@@ -123,14 +118,10 @@ recipesRouter.put("/:id", checkJWT, async (req, res, next) => {
     if (!recipe.user.equals(user)) {
       return res.sendStatus(403);
     }
-    const newRecipe = await Recipe.findOneAndUpdate(
-      { _id: id, user },
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const newRecipe = await Recipe.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     return res.json(newRecipe);
   } catch (e) {
     next(e);
